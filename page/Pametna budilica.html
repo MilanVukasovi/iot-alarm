@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<title>Pametna budilica</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<body>
+
+
+
+<!-- Header -->
+<header class="w3-container w3-theme w3-padding" id="myHeader">
+  <div class="w3-center">
+  <h4>Elektro Boom</h4>
+  <h1 class="w3-xxxlarge w3-animate-bottom"><b>PAMETNA BUDILICA</b></h1>
+    <div class="w3-padding-32">
+    </div>
+  </div>
+</header>
+
+<!-- Modal -->
+
+
+<div class="w3-row-padding w3-center w3-margin-top">
+<div class="w3-third">
+  <div class="w3-card w3-container" style="min-height:460px">
+  <h3>Postavi sat</h3><br>
+  <img src="clock.png"  style="width:120px;height:120px;">
+  <p>Automatsko postavljanje</p>
+  <button onclick="dohvatiVrijeme()">Dohvati</button> 
+  <p id="vrijeme"></p>
+  <p id="vrijemee"></p>
+  <form action="https://api.particle.io/v1/devices/4f0021000451353432383931/changeTimeZone?access_token=a5286a9366861c35187fb206ebfbc3b3aa901414" method="POST"">
+    
+  <input type="submit" id="zonaaa" name="arg" value="+0"></input>
+  </form>
+  
+
+  </div>
+</div>
+
+<div class="w3-third">
+  <div class="w3-card w3-container" style="min-height:460px">
+  <h3>Postavi budilicu</h3><br>
+  <img src="alarm-clock.png"  style="width:120px;height:120px;">
+  <div class="container">
+
+    <h2>Postavi vrijeme budilice</h2>
+    
+      <div class="form-group">
+        <label for="hour">Sat:</label>
+        <input type="number" class="form-control" id="sati" placeholder="Unesite sat" name="hour" min = "0" max = "23">
+      </div>
+      <p></p>
+      <div class="form-group">
+        <label for="minute">Min:</label>
+        <input type="number" class="form-control" id="minutee" placeholder="Unesite minute" name="minute" min = "0" max = "59">
+      </div>
+      <p></p>
+      <button onclick="dohvatiBudilicu()">Potvrdi</button> 
+      
+
+    <form action="https://api.particle.io/v1/devices/4f0021000451353432383931/addAlarm?access_token=a5286a9366861c35187fb206ebfbc3b3aa901414" method="POST"">
+      <input type="submit" id="budilicaaa" name="arg" value="Pošalji" class="btn btn-default"></button>
+    
+    </form>
+    
+  </div>
+
+
+  
+  </div>
+</div>
+
+<div class="w3-third">
+  <div class="w3-card w3-container" style="min-height:460px">
+  <h3>Postavi melodiju</h3><br>
+  <img src="music.png"  style="width:120px;height:120px;">
+  <p>Odaberite melodiju:</p>
+  <form action="https://api.particle.io/v1/devices/4f0021000451353432383931/changeMelody?access_token=a5286a9366861c35187fb206ebfbc3b3aa901414" method="POST">
+    <input type="radio" name="arg" value="0"> Star Wars
+    <input type="button" value="Demo" onclick="playSW()" />
+    <br>
+    <input type="radio" name="arg" value="1"> Game of Thrones
+    <input type="button" value="Demo" onclick="playGoT()" />
+    <br>
+    <input type="radio" name="arg" value="2"> Doom
+    <input type="button" value="Demo" onclick="playDoom()" />
+    <br>
+    <br>
+    <input type="submit" value="Do it!">
+   </form>
+  </div>
+</div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- Script for Sidebar, Tabs, Accordions, Progress bars and slideshows -->
+<script>
+// Side navigation
+function w3_open() {
+  var x = document.getElementById("mySidebar");
+  x.style.width = "100%";
+  x.style.fontSize = "40px";
+  x.style.paddingTop = "10%";
+  x.style.display = "block";
+}
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+}
+
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+}
+
+var vr = document.getElementById("vrijeme");
+function dohvatiVrijeme() {
+  fetch("https://worldtimeapi.org/api/ip")
+  .then(response => response.json())
+  //.then(data => console.log(data.timezone,data.datetime,data.dst))
+  .then(data => document.getElementById('vrijeme').innerHTML = data.datetime);
+  //document.getElementById('vrijeme').innerHTML = newString;
+  setTimeout(function() {
+    dohvatiVrijemee();
+  }, 3000);
+ 
+}
+
+function dohvatiVrijemee() {
+  const innerText = document.getElementById("vrijeme").innerHTML;
+  console.log(innerText);
+  const newString = innerText.slice(26,32);
+  console.log(newString);
+  document.getElementById('vrijemee').innerHTML = "Vaša vremenska zona je:  " + newString;
+  document.getElementById('zonaaa').value = newString;
+}
+
+function dohvatiBudilicu() {
+  //var str = document.getElementById('sati').textContent ;
+  var str = (document.getElementById("sati").value) + (document.getElementById("minutee").value);
+  console.log(str);
+  document.getElementById('budilicaaa').value = str;
+}
+
+var isPlaying = false;
+var music1 = new Audio('SW.mp3');
+var music2 = new Audio('GoT.mp3');
+var music3 = new Audio('Doom.mp3');
+function playGoT(){
+  
+  if(isPlaying == false) {
+    music2.play();
+  }
+  else {
+    music2.pause();
+  }
+  isPlaying = !isPlaying;
+}
+function playSW(){
+  
+  if(isPlaying == false) {
+    music1.play();
+  }
+  else {
+    music1.pause();
+  }
+  isPlaying = !isPlaying;
+}
+function playDoom(){
+  if(isPlaying == false) {
+    music3.play();
+  }
+  else {
+    music3.pause();
+  }
+  isPlaying = !isPlaying;
+}
+
+//https://api.particle.io/v1/devices/**your-device-ID-goes-here**/led1?access_token=**your-access-token-goes-here**" method="POST"
+</script>
+
+
+</body>
+</html>
